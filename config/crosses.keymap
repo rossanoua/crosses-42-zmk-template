@@ -50,12 +50,3 @@
         };
     };
 };
-
-/* Snipe / precision: while the Mouse layer (3) is held (left GUI thumb),
-   divide the right (pointer) trackball movement by 3 for fine control. */
-&trackball_central_listener {
-    snipe {
-        layers = <3>;
-        input-processors = <&zip_xy_scaler 1 3>;
-    };
-};
