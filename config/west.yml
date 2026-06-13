@@ -6,14 +6,36 @@ manifest:
       url-base: https://github.com/zmkfirmware
     - name: Good-Great-Grand-Wonderful
       url-base: https://github.com/Good-Great-Grand-Wonderful
+    - name: efogdev
+      url-base: https://github.com/efogdev
+    - name: badjeff
+      url-base: https://github.com/badjeff
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: ff09f2d0c9f13a868c8f71d71d9348ade438e4b6
+      revision: ac7f75b8591d39aaf3b66b9d26f26c9ed921a009
       import: app/west.yml
     - name: gggw-zmk-keebs
       remote: Good-Great-Grand-Wonderful
-      revision: a5ce07fd8
+      revision: 051dbd8d96aa18a997705526bb7e03460e310496
       import: config/west.yml
+    # Pin floating modules to the v1.3-release-era commits (override gggw's branch refs)
+    # so the stack matches the WORKING release (not the June drift that broke trackballs/OLED).
+    - name: zmk-report-rate-limit
+      remote: efogdev
+      revision: da59f61e9036cecee3218cb632a68d5d99b5f445
+    - name: zmk-pmw3610-driver-efog
+      remote: efogdev
+      repo-path: zmk-pmw3610-driver
+      path: modules/zmk-pmw3610-driver-efog
+      revision: 38105b4f09d6d5b94ef5a3073428719e3c356af1
+    - name: zmk-pmw3610-driver-badjeff
+      remote: badjeff
+      repo-path: zmk-pmw3610-driver
+      path: modules/zmk-pmw3610-driver-badjeff
+      revision: e970029b42f33613ca8f05baf311dc733cd5a390
+    - name: zmk-input-processor-xyz
+      remote: badjeff
+      revision: 0f0574f6a6c5b08fa964dff7b957ce67b2e0a9cf
   self:
     path: config
