@@ -66,3 +66,9 @@
         };
     };
 };
+
+// QMK-style "tap, then tap-and-hold = repeat" on all layer-taps (thumb BSPC/DEL/RET/KP_ENTER).
+// Default &lt has quick-tap-ms = 0 (no repeat); normal hold still activates the layer.
+&lt {
+    quick-tap-ms = <200>;
+};
