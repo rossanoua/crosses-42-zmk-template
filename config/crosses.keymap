@@ -100,5 +100,5 @@
 // Mitigate left-half (scroll peripheral) hang under heavy scrolling: emit fewer
 // wheel ticks (1/4 -> 1/8) so the split link to the central isn't flooded.
 &trackball_peripheral_split {
-    input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_scaler 1 8>, <&zip_ble_report_rate_limit>;
+    input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_scaler 1 12>, <&zip_ble_report_rate_limit>;
 };
