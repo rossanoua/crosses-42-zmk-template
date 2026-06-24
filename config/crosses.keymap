@@ -87,10 +87,15 @@
 };
 
 // Auto-mouse-layer: moving the RIGHT trackball (cursor) temporarily enables layer 4
-// (Mouse) for 500ms; any keystroke or 500ms of stillness drops it. require-prior-idle
-// keeps a bump right after typing from flipping the thumbs to clicks mid-word.
+// (Mouse) for 500ms. excluded-positions = the 3 left-thumb CLICK keys (36/37/38):
+// pressing them keeps the layer (so you can click repeatedly), while ANY OTHER key
+// deactivates it immediately. Without excluded-positions the keypress-deactivation
+// handler isn't even compiled in, so only the 500ms timer drops the layer -- and
+// force-awake sensor jitter keeps rescheduling that timer, leaving the layer stuck on
+// until reconnect. require-prior-idle-ms keeps a bump just after typing from re-raising it.
 &zip_temp_layer {
-    require-prior-idle-ms = <100>;
+    require-prior-idle-ms = <150>;
+    excluded-positions = <36 37 38>;
 };
 
 &trackball_central_listener {
