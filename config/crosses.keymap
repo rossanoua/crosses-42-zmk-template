@@ -107,3 +107,15 @@
 &trackball_peripheral_split {
     input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_scaler 1 12>, <&zip_ble_report_rate_limit>;
 };
+
+// Stop the Mouse auto-layer from sticking: force-awake keeps the RIGHT cursor
+// sensor always sampling, and its idle jitter keeps rescheduling zip_temp_layer's
+// 500ms disable timer so the layer never times out. Drop force-awake so the sensor
+// rests when idle (~2.5s RUN downshift) and stops emitting jitter; cost is a small
+// wake lag on first cursor move. Central-only: trackball_central exists on the right
+// build only, so guard the reference or the left (peripheral) build fails to compile.
+#ifdef CONFIG_ZMK_SPLIT_ROLE_CENTRAL
+&trackball_central {
+    /delete-property/ force-awake;
+};
+#endif
