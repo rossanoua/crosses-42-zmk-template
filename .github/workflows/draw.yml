@@ -1,0 +1,54 @@
+name: Draw keymap
+
+on:
+  push:
+    paths:
+      - 'config/*.keymap'
+      - 'keymap_drawer.config.yaml'
+      - '.github/workflows/draw.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Pin tree-sitter to the API that keymap-drawer's parser expects;
+      # tree-sitter >= 0.22 removed Query.captures and breaks parsing.
+      - name: Install keymap-drawer
+        run: pip install keymap-drawer 'tree-sitter==0.21.3' 'tree-sitter-devicetree==0.12.0'
+
+      - name: Draw keymap
+        run: |
+          mkdir -p keymap-drawer
+          keymap -c keymap_drawer.config.yaml parse -z config/crosses.keymap > /tmp/km.yaml
+          # The physical layout lives in the external shield module, so keymap-drawer
+          # can't auto-detect it -> inject the split 3x6 + 3-thumb ortho layout.
+          {
+            printf 'layout:\n  ortho_layout:\n    split: true\n    rows: 3\n    columns: 6\n    thumbs: 3\n'
+            cat /tmp/km.yaml
+          } > /tmp/km_full.yaml
+          keymap -c keymap_drawer.config.yaml draw /tmp/km_full.yaml > keymap-drawer/crosses.svg
+
+      - name: Commit updated image
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add keymap-drawer/crosses.svg
+          if git diff --staged --quiet; then
+            echo "Keymap image unchanged."
+          else
+            # [skip ci] so the auto-commit doesn't re-trigger the firmware build or this workflow.
+            git commit -m "keymap-drawer: update keymap image [skip ci]"
+            git push
+          fi

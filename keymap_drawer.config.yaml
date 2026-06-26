@@ -104,6 +104,12 @@ parse_config:
     "&mkp RCLK":
       tap: $$mdi:mouse-right-click$$
       hold: "right"
+    "&studio_unlock":
+      tap: Studio
+      hold: unlock
+    # avoid the shift-glyph + space-glyph combination producing a bad glyph URL
+    "&kp LS(SPACE)":
+      tap: "⇧ Spc"
   sticky_label: $$mdi:gesture-tap-hold$$
   toggle_label: toggle
   tap_toggle_label: tap-toggle
